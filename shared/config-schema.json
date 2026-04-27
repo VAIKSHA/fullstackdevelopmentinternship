@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "app": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "description": { "type": "string" },
+        "locale": { "type": "string", "default": "en" },
+        "supportedLocales": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "database": {
+      "type": "object",
+      "properties": {
+        "tables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "type": { "enum": ["string", "number", "boolean", "date", "text", "json"] },
+                    "required": { "type": "boolean", "default": false },
+                    "unique": { "type": "boolean", "default": false },
+                    "default": {}
+                  },
+                  "required": ["name", "type"]
+                }
+              },
+              "relations": { "type": "array" }
+            },
+            "required": ["name", "fields"]
+          }
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "properties": {
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" },
+              "title": { "type": "string" },
+              "type": { "enum": ["form", "table", "dashboard", "custom"] },
+              "dataSource": { "type": "string" },
+              "components": { "type": "array" },
+              "auth": { "type": "boolean", "default": false }
+            }
+          }
+        }
+      }
+    },
+    "api": {
+      "type": "object",
+      "properties": {
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" },
+              "method": { "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"] },
+              "table": { "type": "string" },
+              "action": { "enum": ["create", "read", "update", "delete", "list", "custom"] },
+              "auth": { "type": "boolean", "default": false },
+              "validation": { "type": "object" }
+            }
+          }
+        }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "methods": {
+          "type": "array",
+          "items": { "enum": ["email", "google", "github"] }
+        },
+        "userFields": { "type": "array" }
+      }
+    }
+  }
+}

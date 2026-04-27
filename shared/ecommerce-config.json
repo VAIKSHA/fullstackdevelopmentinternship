@@ -1,0 +1,111 @@
+{
+  "app": {
+    "name": "E-Commerce Platform",
+    "description": "A complete e-commerce solution with products, orders, and customers"
+  },
+  "database": {
+    "tables": [
+      {
+        "name": "products",
+        "fields": [
+          { "name": "name", "type": "string", "required": true },
+          { "name": "description", "type": "text" },
+          { "name": "price", "type": "number", "required": true },
+          { "name": "stock", "type": "number", "default": 0 },
+          { "name": "category", "type": "string" },
+          { "name": "active", "type": "boolean", "default": true },
+          { "name": "metadata", "type": "json" }
+        ]
+      },
+      {
+        "name": "orders",
+        "fields": [
+          { "name": "orderNumber", "type": "string", "required": true, "unique": true },
+          { "name": "customerEmail", "type": "string", "required": true },
+          { "name": "total", "type": "number", "required": true },
+          { "name": "status", "type": "string", "default": "pending" },
+          { "name": "orderDate", "type": "date" },
+          { "name": "notes", "type": "text" }
+        ]
+      },
+      {
+        "name": "customers",
+        "fields": [
+          { "name": "email", "type": "string", "required": true, "unique": true },
+          { "name": "firstName", "type": "string" },
+          { "name": "lastName", "type": "string" },
+          { "name": "phone", "type": "string" },
+          { "name": "address", "type": "text" },
+          { "name": "vip", "type": "boolean", "default": false }
+        ]
+      }
+    ]
+  },
+  "ui": {
+    "pages": [
+      {
+        "path": "/",
+        "title": "Dashboard",
+        "type": "dashboard",
+        "auth": true,
+        "components": [
+          { "type": "stats", "dataSource": "products" },
+          { "type": "stats", "dataSource": "orders" }
+        ]
+      },
+      {
+        "path": "/products",
+        "title": "Products",
+        "type": "table",
+        "dataSource": "products",
+        "auth": true,
+        "components": [
+          { "type": "table", "columns": ["name", "price", "stock", "category", "active"] }
+        ]
+      },
+      {
+        "path": "/products/new",
+        "title": "Add Product",
+        "type": "form",
+        "dataSource": "products",
+        "auth": true,
+        "components": [
+          { "type": "input", "field": "name", "label": "Product Name", "required": true },
+          { "type": "textarea", "field": "description", "label": "Description" },
+          { "type": "number", "field": "price", "label": "Price", "required": true },
+          { "type": "number", "field": "stock", "label": "Stock Quantity" },
+          { "type": "input", "field": "category", "label": "Category" },
+          { "type": "checkbox", "field": "active", "label": "Active" }
+        ]
+      },
+      {
+        "path": "/orders",
+        "title": "Orders",
+        "type": "table",
+        "dataSource": "orders",
+        "auth": true,
+        "components": [
+          { "type": "table", "columns": ["orderNumber", "customerEmail", "total", "status", "orderDate"] }
+        ]
+      }
+    ]
+  },
+  "api": {
+    "endpoints": [
+      { "path": "/api/products", "method": "GET", "table": "products", "action": "list", "auth": true },
+      { "path": "/api/products/:id", "method": "GET", "table": "products", "action": "read", "auth": true },
+      { "path": "/api/products", "method": "POST", "table": "products", "action": "create", "auth": true },
+      { "path": "/api/products/:id", "method": "PUT", "table": "products", "action": "update", "auth": true },
+      { "path": "/api/products/:id", "method": "DELETE", "table": "products", "action": "delete", "auth": true },
+      { "path": "/api/orders", "method": "GET", "table": "orders", "action": "list", "auth": true },
+      { "path": "/api/orders", "method": "POST", "table": "orders", "action": "create", "auth": true },
+      { "path": "/api/customers", "method": "GET", "table": "customers", "action": "list", "auth": true },
+      { "path": "/api/customers", "method": "POST", "table": "customers", "action": "create", "auth": true }
+    ]
+  },
+  "auth": {
+    "enabled": true,
+    "methods": ["email", "google"],
+    "userFields": ["name", "email", "avatar"]
+  }
+}
